@@ -4,8 +4,8 @@ import isResendDisabled from './UserRegistration'
 
 class OtpModal extends React.Component {
   render() {
-    const { otp, onChange, onSubmit, onCancel, onRetry } = this.props;
-
+    const { otp, onChange, onSubmit, onRetry } = this.props;
+   
     return (
       <div className="otp-modal-overlay">
         <div className="otp-modal">

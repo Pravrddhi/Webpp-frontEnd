@@ -6,7 +6,7 @@ import 'primeicons/primeicons.css';
 import './UserRegistration.css';
 import jagdhambImage from '../Assets/jagdhamb.jpg';
 import OtpModal from './OtpModal';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 
 class UserRegistration extends Component {
   constructor(props) {
