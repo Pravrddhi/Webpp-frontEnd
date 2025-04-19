@@ -395,14 +395,14 @@ class UserRegistration extends Component {
 
           <button type="submit">Register</button>
 
-          <div style={{ textAlign: 'center', marginTop: '20px' }}>
+          {/* <div style={{ textAlign: 'center', marginTop: '20px' }}>
             <p>
               Already registered?{' '}
-              <Link to="/" style={{ color: '#800000', textDecoration: 'underline' }}>
+              <Link to="/login" style={{ color: '#800000', textDecoration: 'underline' }}>
                 Click here to Log in
               </Link>
             </p>
-          </div>
+          </div> */}
 
           <div style={{ marginTop: '20px', textAlign: 'center' }}>
             <span style={{ color: '#800000' }}>
@@ -449,7 +449,7 @@ class UserRegistration extends Component {
                   href={this.state.successLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  style={{ display: 'inline-block', marginTop: '15px', color: '#007bff' }}
+                  style={{ display: 'inline-block', marginTop: '15px', color: '#FFFFFF' }}
                 >
                   Join WhatsApp Group
                 </button>

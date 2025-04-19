@@ -153,14 +153,14 @@ class OtpLogin extends Component {
                         <button onClick={this.handleLogout}>Logout</button>
                     )}
 
-                    <div style={{ textAlign: 'center', marginTop: '20px' }}>
+                    {/* <div style={{ textAlign: 'center', marginTop: '20px' }}>
                         <p>
                             Not registered?{' '}
-                            <Link to="/register" style={{ color: '#800000', textDecoration: 'underline' }}>
+                            <Link to="/" style={{ color: '#800000', textDecoration: 'underline' }}>
                                 Click here to register
                             </Link>
                         </p>
-                    </div>
+                    </div> */}
 
                     {/* 🔔 Popup Modal */}
                     {showPopup && (
