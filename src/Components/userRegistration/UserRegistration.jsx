@@ -4,7 +4,7 @@ import 'primereact/resources/themes/lara-light-indigo/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 import './UserRegistration.css';
-import RegistrationImage from '../Assets/jagdhamb.jpg';
+import jagdhambImage from '../Assets/jagdhamb.jpg';
 import OtpModal from './OtpModal';
 import { Link } from 'react-router-dom';
 
@@ -75,7 +75,7 @@ class UserRegistration extends Component {
 
   checkIfUserExists = async (mobileNo) => {
     try {
-      const response = await fetch('http://localhost:8000/api/users/existing_user/', {
+      const response = await fetch('https://gli2l3bb50.execute-api.eu-north-1.amazonaws.com/existing_user', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ mobile_number: mobileNo }),
@@ -270,7 +270,7 @@ class UserRegistration extends Component {
     return (
       <div className="form-container">
         <form id="reg-form" className="registration-form" onSubmit={this.handleSubmit}>
-          <img src={RegistrationImage} alt="Registration Banner" className="registration-image" />
+          <img src={jagdhambImage} alt="Registration Banner" className="registration-image" />
           <h2>Registration Form</h2>
 
           <div className="row">
