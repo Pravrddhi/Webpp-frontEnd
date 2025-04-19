@@ -200,11 +200,11 @@ class UserRegistration extends Component {
     if (this.validateForm()) {
       const {
         firstName, middleName, lastName, mobileNo, age,
-        gender, instrument, address, emergencyContact
+        gender, instrument, address, emergencyContact, experiencePathak, pathakDuration
       } = this.state;
 
       try {
-        const response = await fetch('http://localhost:8000/api/users/register/', {
+        const response = await fetch('https://gli2l3bb50.execute-api.eu-north-1.amazonaws.com/register', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -217,6 +217,8 @@ class UserRegistration extends Component {
             instrument: instrument,
             address: address,
             emergency_contact: emergencyContact,
+            experience_pathak_name: experiencePathak,
+            experience_duration: pathakDuration,
           }),
         });
 
@@ -317,12 +319,19 @@ class UserRegistration extends Component {
 
           <div className="row">
             <div className="form-group" style={{ flex: 2 }}>
-              <input type="number" name="mobileNo" placeholder="Mobile No" onChange={this.handleChange} maxLength={10} />
-              {this.state.mobileError && (
-                <div style={{ color: 'red', fontSize: '0.9em', marginTop: '4px' }}>
-                  {this.state.mobileError}
-                </div>
-              )}
+              <input
+                type="tel"
+                name="mobileNo"
+                placeholder="Mobile No"
+                onChange={this.handleChange}
+                maxLength={10}
+                disabled={this.state.isMobileVerified}
+              />
+                {this.state.mobileError && (
+                  <div style={{ color: 'red', fontSize: '0.9em', marginTop: '4px' }}>
+                    {this.state.mobileError}
+                  </div>
+                )}
             </div>
             <div className="form-group" style={{ alignContent: "auto", marginTop: '6px' }}>
               <button
@@ -337,7 +346,7 @@ class UserRegistration extends Component {
           </div>
           <div className="form-group">
             <input
-              type="number"
+              type="tel"
               name="emergencyContact"
               placeholder="Emergency Contact No"
               onChange={this.handleChange}
@@ -366,9 +375,8 @@ class UserRegistration extends Component {
               <div className="form-group">
                 <input
                   type="text"
-                  name="experience"
+                  name="experiencePathak"
                   placeholder="Name of previous pathak"
-                  value={this.state.experience}
                   onChange={this.handleChange}
                 />
               </div>
@@ -376,9 +384,8 @@ class UserRegistration extends Component {
               <div className="form-group">
                 <input
                   type="text"
-                  name="duration"
-                  placeholder="Duration e.g., 2 years 5 Months"
-                  value={this.state.duration}
+                  name="pathakDuration"
+                  placeholder="pathak Duration e.g., 2.5, 0.5, 4"
                   onChange={this.handleChange}
                 />
               </div>
@@ -389,13 +396,13 @@ class UserRegistration extends Component {
           <button type="submit">Register</button>
 
           <div style={{ textAlign: 'center', marginTop: '20px' }}>
-          <p>
-            Already registered?{' '}
-            <Link to="/" style={{ color: '#800000', textDecoration: 'underline' }}>
-              Click here to Log in
-            </Link>
-          </p>
-        </div>
+            <p>
+              Already registered?{' '}
+              <Link to="/" style={{ color: '#800000', textDecoration: 'underline' }}>
+                Click here to Log in
+              </Link>
+            </p>
+          </div>
 
           <div style={{ marginTop: '20px', textAlign: 'center' }}>
             <span style={{ color: '#800000' }}>
