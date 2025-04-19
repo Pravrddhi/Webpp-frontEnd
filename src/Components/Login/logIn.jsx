@@ -24,7 +24,7 @@ class OtpLogin extends Component {
 
     checkIfUserExists = async (mobileNo) => {
         try {
-            const response = await fetch('http://localhost:8000/api/users/existing_user/', {
+            const response = await fetch('https://gli2l3bb50.execute-api.eu-north-1.amazonaws.com/existing_user', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ mobile_number: mobileNo }),
