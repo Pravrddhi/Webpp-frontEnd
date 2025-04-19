@@ -17,9 +17,8 @@ class OtpModal extends React.Component {
               onChange={onChange}
             />
             <div className="modal-actions-row">
-              <button onClick={onSubmit}>Submit</button>
-              <button onClick={onCancel}>Cancel</button>
               <button onClick={onRetry} disabled={isResendDisabled}>Resend OTP</button>
+              <button onClick={onSubmit}>Submit</button>
             </div>
           </div>
         </div>
