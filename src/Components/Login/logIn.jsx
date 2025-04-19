@@ -1,73 +1,183 @@
-import React from 'react';
-import './logIn.css';
+import React, { Component } from 'react';
+import axios from 'axios';
+import './logIn.css';  // Import the CSS file
+import { Link } from 'react-router-dom';
+import jagdhambImage from '../Assets/jagdhamb.jpg';
 
-class LogIn extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            mobile: '',
-        };
-        this.otpDivId = 'otp-widget'; // Unique ID for Msg91 widget div
-    }
+class OtpLogin extends Component {
+    state = {
+        mobile: '',
+        otp: '',
+        isOtpSent: false,
+        isLoggedIn: false,
+        showPopup: false,
+        popupMessage: '',
+    };
 
     componentDidMount() {
-        // Dynamically load the Msg91 OTP widget script
-        const script = document.createElement('script');
-        script.src = 'https://verify.msg91.com/otp-provider.js';
-        script.async = true;
-        script.onload = () => {
-            const configuration = {
-                widgetId: '35646b737343323738353130',
-                tokenAuth: '446603TCnuMImrwXIQ67f96874P1',
-                identifier: this.state.mobile,
-                exposeMethods: false, // Let widget handle UI itself
-                success: (data) => {
-                    console.log('Success:', data);
-                    // Save token, proceed to next step
-                },
-                failure: (error) => {
-                    console.log('Failure:', error);
-                },
-                var_otp: '' // optional
-            };
-            window.initSendOTP && window.initSendOTP(configuration);
-        };
-        document.body.appendChild(script);
+        const token = localStorage.getItem('token');
+        if (token) {
+            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+            this.setState({ isLoggedIn: true });
+        }
     }
 
-    handleMobileChange = (e) => {
-        this.setState({ mobile: e.target.value });
+    checkIfUserExists = async (mobileNo) => {
+        try {
+            const response = await fetch('http://localhost:8000/api/users/existing_user/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ mobile_number: mobileNo }),
+            });
+            const data = await response.json();
+            return data.exists;
+        } catch (error) {
+            this.setState({ popupMessage: 'Error checking mobile number.', showPopup: true });
+            return false;
+        }
+    };
+
+    handleSendOtp = async () => {
+        const { mobile } = this.state;
+
+        const exists = await this.checkIfUserExists(mobile);
+
+        if (!exists) {
+            this.setState({ popupMessage: 'Mobile number not registered. Please register to continue.', showPopup: true });
+            return;
+        }
+
+        try {
+            await axios.post('http://localhost:8000/send-otp/', { mobile });
+            this.setState({ isOtpSent: true });
+        } catch (error) {
+            this.setState({ popupMessage: 'Failed to send OTP.', showPopup: true });
+        }
+    };
+
+    handleVerifyOtp = async () => {
+        const { mobile, otp } = this.state;
+
+        try {
+            const res = await axios.post('http://localhost:8000/verify-otp/', { mobile, otp });
+
+            const token = res.data.token.access;
+            localStorage.setItem('token', token);
+            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+            this.setState({ isLoggedIn: true, popupMessage: 'Logged in successfully!', showPopup: true });
+        } catch (error) {
+            this.setState({ popupMessage: 'OTP verification failed.', showPopup: true });
+        }
+    };
+
+    handleLogout = () => {
+        localStorage.removeItem('token');
+        delete axios.defaults.headers.common['Authorization'];
+
+        this.setState({
+            mobile: '',
+            otp: '',
+            isOtpSent: false,
+            isLoggedIn: false,
+            popupMessage: 'Logged out successfully.',
+            showPopup: true,
+        });
+    };
+
+    closePopup = () => {
+        this.setState({ showPopup: false, popupMessage: '' });
     };
 
     render() {
+        const { mobile, otp, isOtpSent, isLoggedIn, popupMessage, showPopup } = this.state;
+
         return (
             <div className="login-container">
-                <div className="login-header">
-                    <div className="test">Sign In</div>
-                    <div className="underline"></div>
-                </div>
-                <h1>Login</h1>
-                <form onSubmit={(e) => e.preventDefault()}>
-                    <input
-                        type="tel"
-                        name="mobile"
-                        value={this.state.mobile}
-                        onChange={this.handleMobileChange}
-                        placeholder="Enter mobile number"
-                        maxLength={10}
-                        required
-                    />
+                <form id="reg-form" className="login-form" onSubmit={(e) => e.preventDefault()}>
+                    <img src={jagdhambImage} alt="Registration Banner" className="registration-image" />
+                    <h2>Login</h2>
 
-                    {/* Msg91 OTP Widget will render here */}
-                    <div id={this.otpDivId}></div>
+                    {!isLoggedIn ? (
+                        <>
+                            <div style={{
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                marginBottom: '20px'
+                            }}>
+                                <input
+                                    type="tel"
+                                    placeholder="Enter Mobile Number"
+                                    style={{ marginRight: '20px' }}
+                                    value={mobile}
+                                    onChange={(e) => this.setState({ mobile: e.target.value })}
+                                />
 
-                    <input type="password" placeholder="Password" required />
+                                {!isOtpSent ? (
+                                    <button type="button" onClick={this.handleSendOtp}>Send OTP</button>
+                                ) : (
+                                    <>
+                                        <input
+                                            type="text"
+                                            placeholder="Enter OTP"
+                                            value={otp}
+                                            onChange={(e) => this.setState({ otp: e.target.value })}
+                                            style={{ marginLeft: '10px', marginRight: '10px' }}
+                                        />
+                                        <button type="button" onClick={this.handleVerifyOtp}>Verify OTP</button>
+                                    </>
+                                )}
+                            </div>
 
-                    <button type="submit">Submit</button>
-                </form>
+
+                            <div style={{ textAlign: 'center' }}>
+                                <button
+                                    type="button"
+                                    onClick={this.handleVerifyOtp}
+                                    disabled={otp.trim() === ''}
+                                    style={{
+                                        backgroundColor: otp.trim() === '' ? '#ccc' : '#800000',
+                                        color: '#fff',
+                                        padding: '10px 20px',
+                                        borderRadius: '6px',
+                                        border: 'none',
+                                        cursor: otp.trim() === '' ? 'not-allowed' : 'pointer'
+                                    }}
+                                >
+                                    Login
+                                </button>
+                            </div>
+                        </>
+                    ) : (
+                        <button onClick={this.handleLogout}>Logout</button>
+                    )}
+
+                    <div style={{ textAlign: 'center', marginTop: '20px' }}>
+                        <p>
+                            Not registered?{' '}
+                            <Link to="/register" style={{ color: '#800000', textDecoration: 'underline' }}>
+                                Click here to register
+                            </Link>
+                        </p>
+                    </div>
+
+                    {/* 🔔 Popup Modal */}
+                    {showPopup && (
+                        <div className="overlay">
+                            <div className="popup">
+                                <p>{popupMessage}</p>
+                                <button onClick={this.closePopup} className="closeButton">OK</button>
+                            </div>
+                        </div>
+                    )}
+                </form >
             </div>
+
+
         );
     }
+
 }
 
-export default LogIn;
+export default OtpLogin;
