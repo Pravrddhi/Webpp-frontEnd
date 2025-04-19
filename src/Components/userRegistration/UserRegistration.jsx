@@ -6,6 +6,7 @@ import 'primeicons/primeicons.css';
 import './UserRegistration.css';
 import RegistrationImage from '../Assets/jagdhamb.jpg';
 import OtpModal from './OtpModal';
+import { Link } from 'react-router-dom';
 
 class UserRegistration extends Component {
   constructor(props) {
@@ -349,7 +350,7 @@ class UserRegistration extends Component {
             <div className="error">{errors.address}</div>
           </div>
 
-          <div className="form-group"  style={{ marginTop: '10px' }}>
+          <div className="form-group" style={{ marginTop: '10px' }}>
             <label>
               <input
                 type="checkbox"
@@ -386,6 +387,15 @@ class UserRegistration extends Component {
 
 
           <button type="submit">Register</button>
+
+          <div style={{ textAlign: 'center', marginTop: '20px' }}>
+          <p>
+            Already registered?{' '}
+            <Link to="/" style={{ color: '#800000', textDecoration: 'underline' }}>
+              Click here to Log in
+            </Link>
+          </p>
+        </div>
 
           <div style={{ marginTop: '20px', textAlign: 'center' }}>
             <span style={{ color: '#800000' }}>
@@ -440,7 +450,6 @@ class UserRegistration extends Component {
             </div>
           )
         }
-
       </div >
     );
   }
