@@ -82,7 +82,7 @@ class UserRegistration extends Component {
       });
       const data = await response.json();
       this.setState({ sendOtpFlag: true });
-      return data.exists;
+      return data.status;
     } catch (error) {
       this.showPopup('Error checking mobile number.');
       return false;
