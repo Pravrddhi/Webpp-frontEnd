@@ -4,7 +4,7 @@ import 'primereact/resources/themes/lara-light-indigo/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 import './UserRegistration.css';
-import jagdhambImage from '../Assets/jagdhamb.jpg';
+import jagdhamLogoNoBg from '../Assets/jagdhambNoBg.png';
 import OtpModal from './OtpModal';
 // import { Link } from 'react-router-dom';
 
@@ -272,130 +272,140 @@ class UserRegistration extends Component {
     return (
       <div className="form-container">
         <form id="reg-form" className="registration-form" onSubmit={this.handleSubmit}>
-          <img src={jagdhambImage} alt="Registration Banner" className="registration-image" />
-          <h2>Registration Form</h2>
-
-          <div className="row">
-            <div className="form-group">
-              <input type="text" name="firstName" placeholder="First Name" onChange={this.handleChange} />
-              <div className="error">{errors.firstName}</div>
-            </div>
-            <div className="form-group">
-              <input type="text" name="middleName" placeholder="Middle Name" onChange={this.handleChange} />
-            </div>
+          <div style={{ backgroundColor: '#860903', padding: '1rem', borderTopLeftRadius: '8px', borderTopRightRadius: '8px' }}>
+          <img src={jagdhamLogoNoBg} alt="Registration Banner" className="registration-image" />
           </div>
+          <div style={{
+            border: '2px solid maroon',
+            padding: '1rem',
+            borderBottomLeftRadius: '8px',
+            borderBottomRightRadius: '8px',
+            borderTopLeftRadius: '0',
+            borderTopRightRadius: '0'
+          }}>
+            <h2>Registration Form</h2>
 
-          <div className="row">
-            <div className="form-group">
-              <input type="text" name="lastName" placeholder="Last Name" onChange={this.handleChange} />
-              <div className="error">{errors.lastName}</div>
+            <div className="row">
+              <div className="form-group">
+                <input type="text" name="firstName" placeholder="First Name" onChange={this.handleChange} />
+                <div className="error">{errors.firstName}</div>
+              </div>
+              <div className="form-group">
+                <input type="text" name="middleName" placeholder="Middle Name" onChange={this.handleChange} />
+              </div>
             </div>
-            <div className="form-group">
-              <input type="number" name="age" placeholder="Age" onChange={this.handleChange} />
-              <div className="error">{errors.age}</div>
-            </div>
-          </div>
 
-          <div className="row">
-            <div className="form-group" style={{ flex: 2 }}>
-              <select name="gender" onChange={this.handleChange}>
-                <option value="">Select Gender</option>
-                <option value="MALE">Male</option>
-                <option value="FEMALE">Female</option>
-              </select>
-              <div className="error">{errors.gender}</div>
+            <div className="row">
+              <div className="form-group">
+                <input type="text" name="lastName" placeholder="Last Name" onChange={this.handleChange} />
+                <div className="error">{errors.lastName}</div>
+              </div>
+              <div className="form-group">
+                <input type="number" name="age" placeholder="Age" onChange={this.handleChange} />
+                <div className="error">{errors.age}</div>
+              </div>
             </div>
-            <div className="form-group" style={{ flex: 2 }}>
-              <MultiSelect
-                style={{ backgroundColor: '#ece5e5' }}
-                value={instrument}
-                options={['Dhol', 'Tasha', 'Dhwaj']}
-                onChange={this.handleMultiSelectChange}
-                placeholder="Select Instrument"
-              />
-              <div className="error">{errors.instrument}</div>
-            </div>
-          </div>
 
-          <div className="row">
-            <div className="form-group" style={{ flex: 2 }}>
-              <input
-                type="tel"
-                name="mobileNo"
-                placeholder="Mobile No"
-                onChange={this.handleChange}
-                maxLength={10}
-                disabled={this.state.isMobileVerified}
-              />
+            <div className="row">
+              <div className="form-group" style={{ flex: 2 }}>
+                <select name="gender" onChange={this.handleChange}>
+                  <option value="">Select Gender</option>
+                  <option value="MALE">Male</option>
+                  <option value="FEMALE">Female</option>
+                </select>
+                <div className="error">{errors.gender}</div>
+              </div>
+              <div className="form-group" style={{ flex: 2 }}>
+                <MultiSelect
+                  style={{ backgroundColor: '#ece5e5' }}
+                  value={instrument}
+                  options={['Dhol', 'Tasha', 'Dhwaj']}
+                  onChange={this.handleMultiSelectChange}
+                  placeholder="Select Instrument"
+                />
+                <div className="error">{errors.instrument}</div>
+              </div>
+            </div>
+
+            <div className="row">
+              <div className="form-group" style={{ flex: 2 }}>
+                <input
+                  type="tel"
+                  name="mobileNo"
+                  placeholder="Mobile No"
+                  onChange={this.handleChange}
+                  maxLength={10}
+                  disabled={this.state.isMobileVerified}
+                />
                 {this.state.mobileError && (
                   <div style={{ color: 'red', fontSize: '0.9em', marginTop: '4px' }}>
                     {this.state.mobileError}
                   </div>
                 )}
+              </div>
+              <div className="form-group" style={{ alignContent: "auto", marginTop: '6px' }}>
+                <button
+                  type="button"
+                  className="verify-btn"
+                  onClick={this.handleVerifyClick}
+                  disabled={isMobileVerified}
+                >
+                  {isMobileVerified ? 'Verified' : 'Verify'}
+                </button>
+              </div>
             </div>
-            <div className="form-group" style={{ alignContent: "auto", marginTop: '6px' }}>
-              <button
-                type="button"
-                className="verify-btn"
-                onClick={this.handleVerifyClick}
-                disabled={isMobileVerified}
-              >
-                {isMobileVerified ? 'Verified' : 'Verify'}
-              </button>
-            </div>
-          </div>
-          <div className="form-group">
-            <input
-              type="tel"
-              name="emergencyContact"
-              placeholder="Emergency Contact No"
-              onChange={this.handleChange}
-              maxLength={10}
-            />
-            <div className="error">{errors.emergencyContact}</div>
-          </div>
-          <div className="form-group" style={{ marginTop: '10px' }}>
-            <textarea name="address" onChange={this.handleChange} placeholder="Address"></textarea>
-            <div className="error">{errors.address}</div>
-          </div>
-
-          <div className="form-group" style={{ marginTop: '10px' }}>
-            <label>
+            <div className="form-group">
               <input
-                type="checkbox"
-                checked={this.state.hasExperience}
-                onChange={(e) => this.setState({ hasExperience: e.target.checked })}
+                type="tel"
+                name="emergencyContact"
+                placeholder="Emergency Contact No"
+                onChange={this.handleChange}
+                maxLength={10}
               />
-              &nbsp; I have experience
-            </label>
-          </div>
-
-          {this.state.hasExperience && (
-            <div className="row" style={{ marginTop: '10px' }}>
-              <div className="form-group">
-                <input
-                  type="text"
-                  name="experiencePathak"
-                  placeholder="Name of previous pathak"
-                  onChange={this.handleChange}
-                />
-              </div>
-
-              <div className="form-group">
-                <input
-                  type="text"
-                  name="pathakDuration"
-                  placeholder="pathak Duration e.g., 2.5, 0.5, 4"
-                  onChange={this.handleChange}
-                />
-              </div>
+              <div className="error">{errors.emergencyContact}</div>
             </div>
-          )}
+            <div className="form-group" style={{ marginTop: '10px' }}>
+              <textarea name="address" onChange={this.handleChange} placeholder="Address"></textarea>
+              <div className="error">{errors.address}</div>
+            </div>
+
+            <div className="form-group" style={{ marginTop: '10px' }}>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={this.state.hasExperience}
+                  onChange={(e) => this.setState({ hasExperience: e.target.checked })}
+                />
+                &nbsp; I have experience
+              </label>
+            </div>
+
+            {this.state.hasExperience && (
+              <div className="row" style={{ marginTop: '10px' }}>
+                <div className="form-group">
+                  <input
+                    type="text"
+                    name="experiencePathak"
+                    placeholder="Name of previous pathak"
+                    onChange={this.handleChange}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <input
+                    type="text"
+                    name="pathakDuration"
+                    placeholder="pathak Duration e.g., 2.5, 0.5, 4"
+                    onChange={this.handleChange}
+                  />
+                </div>
+              </div>
+            )}
 
 
-          <button type="submit">Register</button>
+            <button type="submit">Register</button>
 
-          {/* <div style={{ textAlign: 'center', marginTop: '20px' }}>
+            {/* <div style={{ textAlign: 'center', marginTop: '20px' }}>
             <p>
               Already registered?{' '}
               <Link to="/login" style={{ color: '#800000', textDecoration: 'underline' }}>
@@ -404,12 +414,12 @@ class UserRegistration extends Component {
             </p>
           </div> */}
 
-          <div style={{ marginTop: '20px', textAlign: 'center' }}>
-            <span style={{ color: '#800000' }}>
-              If registration fail Contact: 9767704126
-            </span>
-          </div>
-        </form >
+            <div style={{ marginTop: '20px', textAlign: 'center' }}>
+              <span style={{ color: '#800000' }}>
+                If registration fail Contact: 9767704126
+              </span>
+            </div>
+          </div></form >
 
         {showOtpModal && (
           <OtpModal
