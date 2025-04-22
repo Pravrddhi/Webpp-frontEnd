@@ -81,7 +81,6 @@ button {
     cursor: pointer;
     font-weight: bold;
     font-size: 14px;
-    background-color: #800000;
 }
 
 .verify-btn {
@@ -208,10 +207,9 @@ button[type="submit"] {
 
 .registration-image {
     display: block;
-    margin: -20px auto;
+    margin: auto;
     max-width: 100%;
-    height: 250px;
-    padding-bottom: 20px;
+    height: 140px;
   }
 
   .popup-overlay {
