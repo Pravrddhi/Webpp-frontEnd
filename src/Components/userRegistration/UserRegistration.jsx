@@ -66,7 +66,15 @@ class UserRegistration extends Component {
 
   handleChange = (e) => {
     const { name, value } = e.target;
-    this.setState({ [name]: value });
+    const nameRegex = /^[A-Za-z]+$/;      //regex to validate fname,mname and lname
+
+    if (['firstName', 'middleName', 'lastName'].includes(name)) {
+      if (value === '' || nameRegex.test(value)) {
+        this.setState({ [name]: value });
+      }
+    } else {
+      this.setState({ [name]: value });
+    }
   };
 
   handleMultiSelectChange = (e) => {
@@ -112,7 +120,31 @@ class UserRegistration extends Component {
   };
 
   handleVerifyClick = async () => {
-    const { mobileNo } = this.state;
+    const {
+      firstName, lastName, mobileNo, age, gender,
+      instrument, address, emergencyContact
+    } = this.state;
+
+    // Early validation check before sending OTP
+    if (
+      !firstName.trim() ||
+      !lastName.trim() ||
+      !mobileNo.trim() ||
+      !age.trim() ||
+      !gender.trim() ||
+      instrument.length === 0 ||
+      !address.trim() ||
+      !emergencyContact.trim()
+    ) {
+      this.showPopup('Please fill all required fields before verifying your mobile number.');
+      return;
+    } if (!mobileNo || mobileNo.length < 10) {
+      this.setState({ mobileError: 'Enter a valid mobile number.' });
+      return;
+    } else {
+      this.setState({ mobileError: '' }); // clear error if valid
+    }
+
     if (!mobileNo || mobileNo.length < 10) {
       this.setState({ mobileError: 'Enter a valid mobile number.' });
       return;
@@ -250,11 +282,21 @@ class UserRegistration extends Component {
     const errors = {};
     const { firstName, lastName, mobileNo, age, gender, instrument, address, emergencyContact } = this.state;
 
-    if (!firstName.trim()) errors.firstName = 'First name is required';
+    if (!firstName.trim()) {
+      errors.firstName = 'First name is required';
+    } else if (!/^[A-Za-z]+$/.test(firstName)) {
+      errors.firstName = 'First name should contain only letters with no spaces';
+    }
     if (!lastName.trim()) errors.lastName = 'Last name is required';
     if (!mobileNo.trim()) errors.mobileNo = 'Mobile number is required';
     if (!emergencyContact.trim()) errors.emergencyContact = 'Emergency contact is required';
-    if (!age.trim()) errors.age = 'Age is required';
+    if (!age.trim()) {
+      errors.age = 'Age is required';
+    } else if (!/^\d+$/.test(age)) {
+      errors.age = 'Age must be a valid number';
+    } else if (parseInt(age, 10) < 5 || parseInt(age, 10) > 120) {
+      errors.age = 'Age must be between 5 and 120';
+    }
     if (!gender.trim()) errors.gender = 'Gender is required';
     if (instrument.length === 0) errors.instrument = 'At least one instrument must be selected';
     if (!address.trim()) errors.address = 'Address is required';
@@ -273,7 +315,7 @@ class UserRegistration extends Component {
       <div className="form-container">
         <form id="reg-form" className="registration-form" onSubmit={this.handleSubmit}>
           <div style={{ backgroundColor: '#860903', padding: '1rem', borderTopLeftRadius: '8px', borderTopRightRadius: '8px' }}>
-          <img src={jagdhamLogoNoBg} alt="Registration Banner" className="registration-image" />
+            <img src={jagdhamLogoNoBg} alt="Registration Banner" className="registration-image" />
           </div>
           <div style={{
             border: '2px solid maroon',
@@ -287,21 +329,31 @@ class UserRegistration extends Component {
 
             <div className="row">
               <div className="form-group">
-                <input type="text" name="firstName" placeholder="First Name" onChange={this.handleChange} />
+                <input type="text" name="firstName" placeholder="First Name" onChange={this.handleChange} pattern="[A-Za-z]+" onInput={(e) => {
+                  e.target.value = e.target.value.replace(/[^A-Za-z]/g, '');
+                }} />
                 <div className="error">{errors.firstName}</div>
               </div>
               <div className="form-group">
-                <input type="text" name="middleName" placeholder="Middle Name" onChange={this.handleChange} />
+                <input type="text" name="middleName" placeholder="Middle Name" onChange={this.handleChange} pattern="[A-Za-z]+" onInput={(e) => {
+                  e.target.value = e.target.value.replace(/[^A-Za-z]/g, '');
+                }} />
               </div>
             </div>
 
             <div className="row">
               <div className="form-group">
-                <input type="text" name="lastName" placeholder="Last Name" onChange={this.handleChange} />
+                <input type="text" name="lastName" placeholder="Last Name" onChange={this.handleChange} pattern="[A-Za-z]+" onInput={(e) => {
+                  e.target.value = e.target.value.replace(/[^A-Za-z]/g, '');
+                }} />
                 <div className="error">{errors.lastName}</div>
               </div>
               <div className="form-group">
-                <input type="number" name="age" placeholder="Age" onChange={this.handleChange} />
+                <input type="number" name="age" placeholder="Age" onChange={this.handleChange} onInput={(e) => {
+                  e.target.value = e.target.value.replace(/[^0-9]/g, '');
+                  if (parseInt(e.target.value, 10) > 120) e.target.value = '120';
+                  if (parseInt(e.target.value, 10) < 5) e.target.value = '5';
+                }} />
                 <div className="error">{errors.age}</div>
               </div>
             </div>
