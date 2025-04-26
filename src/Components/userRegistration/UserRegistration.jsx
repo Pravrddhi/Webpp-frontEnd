@@ -298,7 +298,7 @@ class UserRegistration extends Component {
 
   render() {
     const {
-      errors, isMobileVerified, showOtpModal, otp, instrument,
+      errors, showOtpModal, otp, instrument,
       showPopup, popupMessage, showSuccessPopup
     } = this.state;
 
