@@ -4,8 +4,8 @@ import isResendDisabled from './UserRegistration'
 
 class OtpModal extends React.Component {
   render() {
-    const { otp, onChange, onSubmit, onRetry } = this.props;
-   
+    const { otp, onChange, onSubmit, onRetry, onCancel } = this.props;
+
     return (
       <div className="otp-modal-overlay">
         <div className="otp-modal">
@@ -19,6 +19,7 @@ class OtpModal extends React.Component {
             <div className="modal-actions-row">
               <button onClick={onRetry} disabled={isResendDisabled}>Resend OTP</button>
               <button onClick={onSubmit}>Submit</button>
+              <button onClick={onCancel}>Cancel</button>
             </div>
           </div>
         </div>

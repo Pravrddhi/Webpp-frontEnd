@@ -136,7 +136,7 @@ class UserRegistration extends Component {
       !address.trim() ||
       !emergencyContact.trim()
     ) {
-      this.showPopup('Please fill all required fields before verifying your mobile number.');
+      this.showPopup('Please fill all details.');
       return;
     } if (!mobileNo || mobileNo.length < 10) {
       this.setState({ mobileError: 'Enter a valid mobile number.' });
@@ -160,16 +160,15 @@ class UserRegistration extends Component {
     const exists = await this.checkIfUserExists(mobileNo);
     if (exists) {
       this.showPopup('Mobile number is already registered.');
-      document.getElementById('reg-form').reset();
       return;
-    }
-    if (this.state.sendOtpFlag) {
+    } else {
       const identifier = `91${mobileNo}`;
       this.sendOtp(identifier);
-    }
+    } 
   };
 
-
+  // Function to handle OTP submission and verification along with rgistering the user
+  // and showing success message
   handleOtpSubmit = () => {
     const { otp, reqId } = this.state;
 
@@ -187,8 +186,8 @@ class UserRegistration extends Component {
       otp,
       (data) => {
         console.log('OTP verified:', data, this.state.otp);
-        this.setState({ isMobileVerified: true, showOtpModal: false });
-        this.showPopup('Mobile number verified!');
+        this.handleSubmit(); // Call the handleSubmit function to register the user
+        this.setState({ showOtpModal: false });
       },
       (error) => {
         console.log('Verification error:', error);
@@ -221,14 +220,6 @@ class UserRegistration extends Component {
   };
 
   handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (!this.state.isMobileVerified) {
-      this.showPopup('Please verify your mobile number first.');
-
-      return;
-    }
-
     if (this.validateForm()) {
       const {
         firstName, middleName, lastName, mobileNo, age,
@@ -313,7 +304,7 @@ class UserRegistration extends Component {
 
     return (
       <div className="form-container">
-        <form id="reg-form" className="registration-form" onSubmit={this.handleSubmit}>
+        <form id="reg-form" className="registration-form">
           <div style={{ backgroundColor: '#860903', padding: '1rem', borderTopLeftRadius: '8px', borderTopRightRadius: '8px' }}>
             <img src={jagdhamLogoNoBg} alt="Registration Banner" className="registration-image" />
           </div>
@@ -395,7 +386,17 @@ class UserRegistration extends Component {
                   </div>
                 )}
               </div>
-              <div className="form-group" style={{ alignContent: "auto", marginTop: '6px' }}>
+              <div className="form-group" style={{ flex: 2 }}>
+                <input
+                  type="tel"
+                  name="emergencyContact"
+                  placeholder="Emergency Contact No"
+                  onChange={this.handleChange}
+                  maxLength={10}
+                />
+                <div className="error">{errors.emergencyContact}</div>
+              </div>
+              {/* <div className="form-group" style={{ alignContent: "auto", marginTop: '6px' }}>
                 <button
                   type="button"
                   className="verify-btn"
@@ -404,17 +405,7 @@ class UserRegistration extends Component {
                 >
                   {isMobileVerified ? 'Verified' : 'Verify'}
                 </button>
-              </div>
-            </div>
-            <div className="form-group">
-              <input
-                type="tel"
-                name="emergencyContact"
-                placeholder="Emergency Contact No"
-                onChange={this.handleChange}
-                maxLength={10}
-              />
-              <div className="error">{errors.emergencyContact}</div>
+              </div> */}
             </div>
             <div className="form-group" style={{ marginTop: '10px' }}>
               <textarea name="address" onChange={this.handleChange} placeholder="Address"></textarea>
@@ -454,8 +445,17 @@ class UserRegistration extends Component {
               </div>
             )}
 
+            <div className="form-group" style={{ alignContent: "auto", marginTop: '6px' }}>
+              <button
+                type="button"
+                className="verify-btn"
+                onClick={this.handleVerifyClick}
+              >
+                Register
+              </button>
+            </div>
 
-            <button type="submit">Register</button>
+            {/* <button type="button" onClick={this.handleVerifyClick}>Register</button> */}
 
             {/* <div style={{ textAlign: 'center', marginTop: '20px' }}>
             <p>
