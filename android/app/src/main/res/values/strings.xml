@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name"> jagdhambtrustpune</string>
+    <string name="title_activity_main"> jagdhambtrustpune</string>
+    <string name="package_name">com.jagdhambtrustpune.app</string>
+    <string name="custom_url_scheme">com.jagdhambtrustpune.app</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+</resources>
