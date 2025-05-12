@@ -1,0 +1,46 @@
+.landing-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full viewport height */
+    text-align: center;
+}
+
+.landing-image {
+    width: 70%; /* adjust as needed */
+    height: auto;
+    margin-bottom: 20px;
+    margin-left: 15%;
+}
+
+.navbar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #800000;
+    padding: 20px;
+    color: white;
+    font-size: 30px;
+}
+  .nav-links {
+    list-style: none;
+    display: flex;
+    gap: 70px;
+    margin: 0;
+  }
+  
+  .nav-links li a {
+    text-decoration: none;
+    color: white;
+    font-family: "Comic Sans MS", Comic Sans, cursive	;
+    font-weight: 600;
+  }
+  
+  .nav-links li a:hover {
+    text-decoration: none;
+    color: #ffd700; /* Gold or any bright color */
+    text-shadow: 0 0 8px #ffe44b;
+    transition: all 0.3s ease-in-out;
+}
+  
